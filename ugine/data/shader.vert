@@ -27,39 +27,21 @@ uniform float refractionCoef;
 uniform vec3 eyePos;
 uniform mat4 ModelMatrix;
 
-uniform bool skinned;
-uniform mat4 animMatrices[64];
-attribute vec4 vboneIndices;
-attribute vec4 vboneWeights;
+uniform mat4 depthBiasMatrix;
+varying vec4 depthCoord;
+uniform bool shadows;
 
 
 void main() {
-
-	vec4 vpos4;
-
-	if ( skinned )
-	{
-		mat4 boneTransform = mat4(1);
-		for ( int i = 0; i < 4; ++i )
-		{
-			int index = int(vboneIndices[i]);
-			if ( index > -1 )
-				boneTransform += animMatrices[index] * vboneWeights[i];
-		}
-		
-		vpos4 = boneTransform * vec4(vpos, 1);
-	}
-	else
-	{
-		vpos4 = vec4(vpos, 1);
-	}
-
-
-    gl_Position = mvpMatrix * vpos4;
+    gl_Position = mvpMatrix * vec4(vpos, 1);
     vec4 tempN = normalsMatrix * vec4(vnormal, 0);
     N = normalize(tempN.xyz);
     
-    vertexObserver = mvMatrix * vpos4;
+    vertexObserver = mvMatrix * vec4(vpos, 1);
+
+	if (shadows)
+		depthCoord = ModelMatrix * depthBiasMatrix * vec4(vpos, 1);
+		//depthCoord = depthBiasMatrix * vec4(vpos, 1);
     
     fTexture = vTexture;
     
@@ -78,7 +60,7 @@ void main() {
     
     
     // Cubemapping
-    vec3 eye = normalize(vec3(ModelMatrix * vpos4) - eyePos);
+    vec3 eye = normalize(vec3(ModelMatrix * vec4(vpos, 1)) - eyePos);
     vec3 normal = vec3(ModelMatrix * vec4(vnormal, 0));
     
     if (hasRefractionTexture)
@@ -95,8 +77,7 @@ void main() {
     }
     else
     {
-        uvw = normalize(vpos4.xyz);
+        uvw = normalize(vpos);
     }
-    
-    
+
 }

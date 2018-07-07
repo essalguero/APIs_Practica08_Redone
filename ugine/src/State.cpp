@@ -12,5 +12,6 @@ glm::vec3 State::ambient;
 
 glm::vec3 State::eyePos;
 
-bool State::animation;
-std::shared_ptr<std::vector<glm::mat4>> State::animMatrices;
+std::shared_ptr<Shader> State::overrideShader;
+glm::mat4 State::depthBiasMatrix;
+bool State::shadows;

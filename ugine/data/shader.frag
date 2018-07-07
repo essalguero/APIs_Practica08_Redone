@@ -38,6 +38,11 @@ vec3 normalizedN;
 
 uniform bool hasTexture;
 
+varying vec4 depthCoord;
+uniform bool shadows;
+uniform sampler2D depthSampler;
+
+
 struct LightInfo                                                           
 {  
 	vec4 lightColor;
@@ -100,11 +105,12 @@ LightComponents calculateLight(int i)
 
 void main()
 {
+
 	vec4 diffuseComponent = vec4(1, 1, 1, 1);
 	vec4 specularComponent = vec4(0, 0, 0, 0);
 	LightComponents currentLight; 
 
-	/*if (numberLights > 0)
+	if (numberLights > 0)
 	{
 		diffuseComponent = vec4(0, 0, 0, 1);
 
@@ -116,7 +122,7 @@ void main()
 			diffuseComponent += currentLight.diffuseComponent;
 			
 		}
-	}*/
+	}
 
 	vec4 finalColor = diffuseComponent * color;
 
@@ -125,6 +131,31 @@ void main()
 		 finalColor *= texture2D(texSampler, fTexture);
 	}
 	
+	vec4 shadowColor = vec4(1, 1, 1, 1);
+	if (texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009))
+	{
+		shadowColor = vec4(ambientLight, 1) + vec4(0.3, 0.3, 0.3, 1);
+		//gl_FragColor = texture2D(depthSampler, vec2(depthCoord));
+		//gl_FragColor = vec4(0, 0, 0, 1);
+	}
+
+	finalColor = finalColor * shadowColor;
+
 	gl_FragColor = finalColor + specularComponent;
+
+	//
+
+	/*gl_FragColor = vec4(texture2D(depthSampler, vec2(depthCoord)).z, 
+		texture2D(depthSampler, vec2(depthCoord)).z, 
+		texture2D(depthSampler, vec2(depthCoord)).z, 1);
+	*/
+
+	//gl_FragColor = vec4(depthCoord.z + 1, depthCoord.z + 1, depthCoord.z + 1, 1);
+
+	//gl_FragColor = texture2D(depthSampler, vec2(fTexture));
+
+	/*gl_FragColor = vec4(texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009),
+		texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009),
+		texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009), 1);*/
 
 }

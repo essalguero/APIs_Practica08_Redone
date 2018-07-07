@@ -10,8 +10,6 @@
 
 #include <vector>
 
-#include "Bone.h"
-
 
 class Mesh
 {
@@ -33,19 +31,9 @@ public:
 		const std::shared_ptr<Shader>& shader = nullptr);
 
 
-	void addBone(const Bone& bone);
-	const std::vector<Bone>& getBones() const;
-	uint16_t getLastFrame() const;
-	void setLastFrame(uint16_t lastFrame);
-	int getBoneIndex(const char* name) const;
-
-
 private:
 	std::vector<shared_ptr<Buffer>> buffersVector;
 	std::vector<Material> materialsVector;
 
-	std::vector<Bone> bones;
-
-	float animLastFrame;
 
 };

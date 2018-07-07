@@ -24,6 +24,9 @@ public:
 		const char* top, const char* bottom);
 	bool isCube() const;
 
+	static std::shared_ptr<Texture> createTexture(uint16_t width, uint16_t height, bool isDepth = false);
+	bool isDepth() const;
+
 
 protected:
 	Texture(GLuint textureId, int height, int width);
@@ -39,4 +42,6 @@ private:
 	int imageWidth;
 
 	bool isCubemap = false;
+
+	bool isDepthTexture = false;
 };

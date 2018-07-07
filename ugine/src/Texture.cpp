@@ -149,3 +149,42 @@ bool Texture::isCube() const
 {
 	return isCubemap;
 }
+
+std::shared_ptr<Texture> Texture::createTexture(uint16_t width, uint16_t height, bool isDepth)
+{
+	int imageHeight = width;
+	int imageWidth = height;
+	GLuint textureId;
+
+
+	glGenTextures(1, &textureId);
+
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	if (isDepth)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, imageWidth, imageHeight, 0,
+			GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+	}
+	else
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	}
+
+
+	std::shared_ptr<Texture> texture(new Texture(textureId, imageHeight, imageWidth), destroy);
+
+	texture->isCubemap = false;
+
+	return texture;
+}
+
+bool Texture::isDepth() const
+{
+	return isDepthTexture;
+}

@@ -13,8 +13,9 @@ public:
 
 	Light(glm::vec3 position, Type type, glm::vec3 color, float linearAttenuation, glm::vec3 direction) :
 		lightType(type), lightColor(color), linearAttenuation(linearAttenuation) {
-		this->position = position;
-		this->rotation = direction;
+
+		setRotation(direction);
+		setPosition(position);
 	};
 
 	Type			getType() const;
