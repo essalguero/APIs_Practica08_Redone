@@ -374,7 +374,6 @@ std::shared_ptr<Mesh> Mesh::load(
 			if (coords != "")
 			{
 				coordsVector = splitStr<float>(coords, ',');
-				std::cout << "Coordenadas: " << coordsVector.at(0) << std::endl;
 			}
 			else
 			{
