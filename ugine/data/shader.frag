@@ -135,27 +135,10 @@ void main()
 	if (texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009))
 	{
 		shadowColor = vec4(ambientLight, 1) + vec4(0.3, 0.3, 0.3, 1);
-		//gl_FragColor = texture2D(depthSampler, vec2(depthCoord));
-		//gl_FragColor = vec4(0, 0, 0, 1);
 	}
 
 	finalColor = finalColor * shadowColor;
 
 	gl_FragColor = finalColor + specularComponent;
-
-	//
-
-	/*gl_FragColor = vec4(texture2D(depthSampler, vec2(depthCoord)).z, 
-		texture2D(depthSampler, vec2(depthCoord)).z, 
-		texture2D(depthSampler, vec2(depthCoord)).z, 1);
-	*/
-
-	//gl_FragColor = vec4(depthCoord.z + 1, depthCoord.z + 1, depthCoord.z + 1, 1);
-
-	//gl_FragColor = texture2D(depthSampler, vec2(fTexture));
-
-	/*gl_FragColor = vec4(texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009),
-		texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009),
-		texture2D(depthSampler, vec2(depthCoord)).z < (depthCoord.z - 0.0009), 1);*/
 
 }

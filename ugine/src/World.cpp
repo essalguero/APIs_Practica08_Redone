@@ -14,7 +14,6 @@ std::string readStringWorld(const char* filename) {
 World::World()
 {
 	glm::vec2 bufferSize = glm::vec2(1024, 1024);
-	//glm::vec2 bufferSize = glm::vec2(800, 800);
 	std::shared_ptr<Texture> depthTexture = Texture::createTexture(
 		static_cast<uint16_t>(bufferSize.x), static_cast<uint16_t>(bufferSize.y), true);
 	std::shared_ptr<Framebuffer> depthFramebuffer = std::make_shared<Framebuffer>(nullptr, depthTexture);
@@ -222,7 +221,6 @@ void World::draw()
 				glm::vec4(0, 0, 0.5f, 0),
 				glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 			State::depthBiasMatrix = biasMatrix * State::projectionMatrix * State::viewMatrix;
-			//State::depthBiasMatrix = biasMatrix * State::projectionMatrix * State::viewMatrix * glm::mat4(1.0f);
 
 			depthCamera->getFramebuffer()->getDepthTexture()->bind(15);
 
@@ -245,14 +243,6 @@ void World::draw()
 			entity->draw();
 		}
 	}
-
-	
-
-	/*depthCamera->prepare();
-	for (auto &entity : entitiesVector)
-	{
-		entity->draw();
-	}*/
 }
 
 const glm::vec3& World::getAmbient() const
